@@ -12,7 +12,13 @@
     <h2>Swipe right on your next career move.</h2>
   </div>
 
-  <main id="signup">
+  <main id="preview">
+    <h2>Featured Roles</h2>
+    <div id="previewJobs" class="job-list"></div>
+    <p><strong>Sign up to swipe, match and chat.</strong></p>
+  </main>
+
+  <main id="signup" class="hidden">
     <h2>Sign Up</h2>
     <input type="text" id="name" placeholder="Your Name" />
     <input type="email" id="email" placeholder="Your Email" />
@@ -34,9 +40,7 @@
     </nav>
 
     <section id="jobsTab" class="tab">
-      <div id="jobsContent">
-        <!-- seeker will see cards, poster will see text -->
-      </div>
+      <div id="jobsContent"></div>
     </section>
 
     <section id="matchesTab" class="tab hidden">

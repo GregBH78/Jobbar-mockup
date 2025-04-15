@@ -1,7 +1,8 @@
 window.onload = function () {
+  const splash = document.getElementById("splash");
+  const preview = document.getElementById("preview");
   const signupSection = document.getElementById("signup");
   const dashboard = document.getElementById("dashboard");
-  const splash = document.getElementById("splash");
   const matchList = document.getElementById("matchList");
   const jobsContent = document.getElementById("jobsContent");
   const welcomeUser = document.getElementById("welcomeUser");
@@ -16,11 +17,26 @@ window.onload = function () {
     const user = JSON.parse(localStorage.getItem("jobbarUser"));
     if (user) {
       splash.style.display = "none";
+      preview.classList.add("hidden");
       signupSection.classList.add("hidden");
       dashboard.classList.remove("hidden");
       welcomeUser.textContent = `Welcome, ${user.name}`;
       renderDashboard(user);
+    } else {
+      renderPreview();
+      signupSection.classList.remove("hidden");
     }
+  }
+
+  function renderPreview() {
+    const container = document.getElementById("previewJobs");
+    container.innerHTML = "";
+    dummyJobs.forEach(job => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `<h3>${job.title}</h3><p>${job.company}</p><p>${job.desc}</p>`;
+      container.appendChild(card);
+    });
   }
 
   window.submitSignup = function () {
