@@ -17,23 +17,45 @@ const jobs = [
 ];
 
 let currentJob = 0;
+const card = document.getElementById("jobCard");
+let startX = 0;
 
-function swipe(direction) {
-  const card = document.getElementById("jobCard");
-  card.classList.add(direction === 'yes' ? 'swipe-right' : 'swipe-left');
-
-  setTimeout(() => {
-    card.classList.remove('swipe-left', 'swipe-right');
-    currentJob = (currentJob + 1) % jobs.length;
-    renderJob();
-  }, 600);
+function swipeCard(event) {
+  const moveX = event.clientX - startX;
+  card.style.transform = `translateX(${moveX}px) rotate(${moveX / 20}deg)`;
 }
+
+function endSwipe(event) {
+  const moveX = event.clientX - startX;
+  if (Math.abs(moveX) > 120) {
+    card.style.transition = "transform 0.3s ease";
+    card.style.transform = `translateX(${moveX > 0 ? 1000 : -1000}px) rotate(${moveX / 10}deg)`;
+    setTimeout(() => {
+      card.style.transition = "none";
+      card.style.transform = "translateX(0)";
+      currentJob = (currentJob + 1) % jobs.length;
+      renderJob();
+    }, 300);
+  } else {
+    card.style.transform = "translateX(0)";
+  }
+  card.removeEventListener("pointermove", swipeCard);
+  card.removeEventListener("pointerup", endSwipe);
+}
+
+card.addEventListener("pointerdown", e => {
+  startX = e.clientX;
+  card.setPointerCapture(e.pointerId);
+  card.addEventListener("pointermove", swipeCard);
+  card.addEventListener("pointerup", endSwipe);
+});
 
 function renderJob() {
   const job = jobs[currentJob];
   document.getElementById("jobTitle").textContent = job.title;
   document.getElementById("jobCompany").textContent = job.company;
   document.getElementById("jobDesc").textContent = job.desc;
+  card.style.transform = "none";
 }
 
 function switchTab(tabId) {
