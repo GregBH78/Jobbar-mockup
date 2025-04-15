@@ -57,6 +57,8 @@ window.onload = function () {
     document.getElementById("jobCompany").textContent = job.company;
     document.getElementById("jobDesc").textContent = job.desc;
     card.style.transform = "none";
+    card.style.transition = "none";
+    card.style.left = "0";
   }
 
   function switchTab(tabId) {
@@ -102,6 +104,8 @@ window.onload = function () {
     document.getElementById("jobCompany").textContent = job.company;
     document.getElementById("jobDesc").textContent = job.desc;
     card.style.transform = "none";
+    card.style.transition = "none";
+    card.style.left = "0";
   }
 
   function switchTab(tabId) {
