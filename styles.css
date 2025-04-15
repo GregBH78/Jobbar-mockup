@@ -1,5 +1,5 @@
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   background: #f5f7fa;
   color: #333;
@@ -21,74 +21,23 @@ body {
   border-radius: 10px;
 }
 
-main {
-  padding: 2rem;
-  text-align: center;
-}
-
-input[type="text"],
-input[type="email"] {
-  display: block;
-  width: 80%;
+.card-container {
   max-width: 400px;
-  margin: 1rem auto;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.role-select {
-  margin: 1rem auto;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  background: #6c5ce7;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.hidden {
-  display: none;
-}
-
-header {
-  background: #6c5ce7;
-  color: white;
-  padding: 1rem;
-}
-
-nav {
-  margin: 1rem 0;
-}
-
-nav button {
-  margin: 0 0.5rem;
-  background: #ddd;
-  color: #333;
-}
-
-.tab {
-  padding: 1rem;
+  margin: 2rem auto;
+  height: 300px;
+  position: relative;
 }
 
 .card {
   background: white;
   padding: 2rem;
   border-radius: 10px;
-  max-width: 400px;
-  margin: 1rem auto;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.job-list .card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin: 1rem auto;
-  max-width: 400px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
 }

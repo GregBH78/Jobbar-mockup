@@ -1,102 +1,72 @@
 window.onload = function () {
-  const splash = document.getElementById("splash");
-  const preview = document.getElementById("preview");
-  const signupSection = document.getElementById("signup");
-  const dashboard = document.getElementById("dashboard");
-  const matchList = document.getElementById("matchList");
-  const jobsContent = document.getElementById("jobsContent");
-  const welcomeUser = document.getElementById("welcomeUser");
-
-  const dummyJobs = [
-    { title: "Product Designer", company: "@CreativeX", desc: "Design mobile-first product experiences." },
-    { title: "Backend Engineer", company: "@DataNest", desc: "Build secure APIs and database flows." },
-    { title: "Marketing Intern", company: "@ZoomBoom", desc: "Help us grow with social and brand campaigns." }
+  const jobs = [
+    {
+      title: "Frontend Developer",
+      company: "@SwiftTech",
+      desc: "Looking for a React dev who loves building sleek interfaces and fast prototypes."
+    },
+    {
+      title: "UX Designer",
+      company: "@DesignCore",
+      desc: "Create delightful, user-first product experiences across web and mobile."
+    },
+    {
+      title: "Marketing Coordinator",
+      company: "@ZoomBoom",
+      desc: "Help us grow with social campaigns and brand storytelling."
+    }
   ];
 
-  function loadUser() {
-    const user = JSON.parse(localStorage.getItem("jobbarUser"));
-    if (user) {
-      splash.style.display = "none";
-      preview.classList.add("hidden");
-      signupSection.classList.add("hidden");
-      dashboard.classList.remove("hidden");
-      welcomeUser.textContent = `Welcome, ${user.name}`;
-      renderDashboard(user);
+  let currentJob = 0;
+  const card = document.getElementById("jobCard");
+  let startX = null;
+
+  function startSwipe(e) {
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+  }
+
+  function moveSwipe(e) {
+    if (startX === null) return;
+    const currentX = e.touches ? e.touches[0].clientX : e.clientX;
+    const deltaX = currentX - startX;
+    card.style.transform = `translateX(${deltaX}px) rotate(${deltaX / 20}deg)`;
+  }
+
+  function endSwipe(e) {
+    if (startX === null) return;
+    const endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+    const deltaX = endX - startX;
+
+    if (Math.abs(deltaX) > 100) {
+      card.style.transition = "transform 0.3s ease";
+      card.style.transform = `translateX(${deltaX > 0 ? 1000 : -1000}px) rotate(${deltaX / 10}deg)`;
+      setTimeout(() => {
+        currentJob = (currentJob + 1) % jobs.length;
+        renderJob();
+        card.style.transition = "none";
+        card.style.transform = "translateX(0)";
+      }, 300);
     } else {
-      renderPreview();
-      signupSection.classList.remove("hidden");
+      card.style.transition = "transform 0.3s ease";
+      card.style.transform = "translateX(0)";
     }
+
+    startX = null;
   }
 
-  function renderPreview() {
-    const container = document.getElementById("previewJobs");
-    container.innerHTML = "";
-    dummyJobs.forEach(job => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `<h3>${job.title}</h3><p>${job.company}</p><p>${job.desc}</p>`;
-      container.appendChild(card);
-    });
+  function renderJob() {
+    const job = jobs[currentJob];
+    document.getElementById("jobTitle").textContent = job.title;
+    document.getElementById("jobCompany").textContent = job.company;
+    document.getElementById("jobDesc").textContent = job.desc;
   }
 
-  window.submitSignup = function () {
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const role = document.querySelector("input[name='role']:checked").value;
-    if (!name || !email) return alert("Please fill out all fields.");
-    const user = { name, email, role };
-    localStorage.setItem("jobbarUser", JSON.stringify(user));
-    localStorage.setItem("jobbarMatches", JSON.stringify([]));
-    loadUser();
-  };
+  card.addEventListener("touchstart", startSwipe);
+  card.addEventListener("touchmove", moveSwipe);
+  card.addEventListener("touchend", endSwipe);
+  card.addEventListener("mousedown", startSwipe);
+  card.addEventListener("mousemove", moveSwipe);
+  card.addEventListener("mouseup", endSwipe);
 
-  function renderDashboard(user) {
-    jobsContent.innerHTML = "";
-    matchList.innerHTML = "";
-    if (user.role === "seeker") {
-      dummyJobs.forEach((job, i) => {
-        const div = document.createElement("div");
-        div.className = "card";
-        div.innerHTML = `<h3>${job.title}</h3><p>${job.company}</p><p>${job.desc}</p>
-                         <button onclick="matchJob(${i})">Swipe Right</button>`;
-        jobsContent.appendChild(div);
-      });
-    } else {
-      jobsContent.innerHTML = "<p>You have 3 applicants interested in your job post.</p>";
-      const fakeMatches = ["Alice Johnson", "Bob Smith", "Casey Lee"];
-      fakeMatches.forEach(name => {
-        const li = document.createElement("li");
-        li.textContent = `${name} liked your job!`;
-        matchList.appendChild(li);
-      });
-    }
-  }
-
-  window.matchJob = function (index) {
-    const matches = JSON.parse(localStorage.getItem("jobbarMatches")) || [];
-    matches.push(dummyJobs[index]);
-    localStorage.setItem("jobbarMatches", JSON.stringify(matches));
-    alert("Matched! Check your Matches tab.");
-  };
-
-  window.switchTab = function (tabId) {
-    document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
-    document.getElementById(tabId).classList.remove("hidden");
-    if (tabId === "matchesTab") {
-      const matches = JSON.parse(localStorage.getItem("jobbarMatches")) || [];
-      matchList.innerHTML = "";
-      matches.forEach(m => {
-        const li = document.createElement("li");
-        li.textContent = `${m.title} at ${m.company}`;
-        matchList.appendChild(li);
-      });
-    }
-  };
-
-  window.logout = function () {
-    localStorage.clear();
-    location.reload();
-  };
-
-  loadUser();
+  renderJob();
 };
