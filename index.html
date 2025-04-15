@@ -22,6 +22,19 @@
     </div>
   </main>
 
+  <div id="signupModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Join Jobbar</h2>
+      <input type="text" id="name" placeholder="Your Name" />
+      <input type="email" id="email" placeholder="Your Email" />
+      <div class="role-select">
+        <label><input type="radio" name="role" value="seeker" checked /> Job Seeker</label>
+        <label><input type="radio" name="role" value="poster" /> Job Poster</label>
+      </div>
+      <button onclick="submitSignup()">Sign Up</button>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

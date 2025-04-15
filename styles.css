@@ -41,3 +41,43 @@ body {
   user-select: none;
   cursor: grab;
 }
+
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-content input {
+  width: 90%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+}
+
+button {
+  background: #6c5ce7;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  margin-top: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
