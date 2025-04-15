@@ -7,57 +7,42 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="splash">
+  <div class="splash" id="splash">
     <img src="IMG_0043.jpeg" alt="Jobbar logo" class="logo" />
     <h2>Swipe right on your next career move.</h2>
   </div>
 
-  <header>
+  <main id="signup">
+    <h2>Sign Up</h2>
+    <input type="text" id="name" placeholder="Your Name" />
+    <input type="email" id="email" placeholder="Your Email" />
+    <div class="role-select">
+      <label><input type="radio" name="role" value="seeker" checked /> Job Seeker</label>
+      <label><input type="radio" name="role" value="poster" /> Job Poster</label>
+    </div>
+    <button onclick="submitSignup()">Continue</button>
+  </main>
+
+  <main id="dashboard" class="hidden">
+    <header>
+      <h2 id="welcomeUser"></h2>
+      <button onclick="logout()">Log Out</button>
+    </header>
     <nav>
-      <button onclick="switchTab('jobs')">Jobs</button>
-      <button onclick="switchTab('chat')">Chat</button>
-      <button onclick="switchTab('news')">News</button>
-      <button onclick="switchTab('profile')">Profile</button>
+      <button onclick="switchTab('jobsTab')">Jobs</button>
+      <button onclick="switchTab('matchesTab')">Matches</button>
     </nav>
-  </header>
 
-  <main id="jobs" class="tab active">
-    <div class="card-container">
-      <div class="card" id="jobCard">
-        <h2 id="jobTitle">Frontend Developer</h2>
-        <p id="jobCompany">@SwiftTech</p>
-        <p id="jobDesc">Looking for a React dev who loves building sleek interfaces and fast prototypes.</p>
+    <section id="jobsTab" class="tab">
+      <div id="jobsContent">
+        <!-- seeker will see cards, poster will see text -->
       </div>
-    </div>
-  </main>
+    </section>
 
-  <main id="chat" class="tab">
-    <div class="chat-window">
-      <p><strong>SwiftTech HR:</strong> Hey! Loved your profile. Can we schedule a chat?</p>
-      <input type="text" placeholder="Type a message..." />
-    </div>
-  </main>
-
-  <main id="news" class="tab">
-    <h2>Industry Buzz</h2>
-    <ul>
-      <li>How Gen Z is reshaping the job market</li>
-      <li>Top 5 ways to ditch your CV and get noticed</li>
-      <li>Startup culture vs. Corporate life: What suits you?</li>
-    </ul>
-  </main>
-
-  <main id="profile" class="tab">
-    <div class="profile-form">
-      <h2>My Profile</h2>
-      <input type="text" id="profileName" placeholder="Your Name" />
-      <label><input type="checkbox" value="Design" /> Design</label>
-      <label><input type="checkbox" value="Engineering" /> Engineering</label>
-      <label><input type="checkbox" value="Marketing" /> Marketing</label>
-      <input type="file" id="profilePic" accept="image/*" />
-      <button onclick="saveProfile()">Save Profile</button>
-      <p id="saveMsg"></p>
-    </div>
+    <section id="matchesTab" class="tab hidden">
+      <h3>Matches</h3>
+      <ul id="matchList"></ul>
+    </section>
   </main>
 
   <script src="app.js"></script>

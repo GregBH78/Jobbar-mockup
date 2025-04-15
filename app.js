@@ -1,135 +1,86 @@
 window.onload = function () {
-  const jobs = [
-    {
-      title: "Frontend Developer",
-      company: "@SwiftTech",
-      desc: "Looking for a React dev who loves building sleek interfaces and fast prototypes."
-    },
-    {
-      title: "Marketing Coordinator",
-      company: "@Brandly",
-      desc: "Social-savvy creative to support campaigns, reels, and growth marketing efforts."
-    },
-    {
-      title: "Junior UX Designer",
-      company: "@NeoUI",
-      desc: "Work on wireframes, user research, and A/B testing for our wellness app."
-    }
+  const signupSection = document.getElementById("signup");
+  const dashboard = document.getElementById("dashboard");
+  const splash = document.getElementById("splash");
+  const matchList = document.getElementById("matchList");
+  const jobsContent = document.getElementById("jobsContent");
+  const welcomeUser = document.getElementById("welcomeUser");
+
+  const dummyJobs = [
+    { title: "Product Designer", company: "@CreativeX", desc: "Design mobile-first product experiences." },
+    { title: "Backend Engineer", company: "@DataNest", desc: "Build secure APIs and database flows." },
+    { title: "Marketing Intern", company: "@ZoomBoom", desc: "Help us grow with social and brand campaigns." }
   ];
 
-  let currentJob = 0;
-  const card = document.getElementById("jobCard");
-  let startX = 0;
-
-  function swipeCard(event) {
-    const moveX = event.clientX - startX;
-    card.style.transform = `translateX(${moveX}px) rotate(${moveX / 20}deg)`;
-  }
-
-  function endSwipe(event) {
-    const moveX = event.clientX - startX;
-    if (Math.abs(moveX) > 120) {
-      card.style.transition = "transform 0.3s ease";
-      card.style.transform = `translateX(${moveX > 0 ? 1000 : -1000}px) rotate(${moveX / 10}deg)`;
-      setTimeout(() => {
-        card.style.transition = "none";
-        card.style.transform = "translateX(0)";
-        currentJob = (currentJob + 1) % jobs.length;
-        renderJob();
-      }, 300);
-    } else {
-      card.style.transform = "translateX(0)";
+  function loadUser() {
+    const user = JSON.parse(localStorage.getItem("jobbarUser"));
+    if (user) {
+      splash.style.display = "none";
+      signupSection.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+      welcomeUser.textContent = `Welcome, ${user.name}`;
+      renderDashboard(user);
     }
-    card.removeEventListener("pointermove", swipeCard);
-    card.removeEventListener("pointerup", endSwipe);
   }
 
-  card.addEventListener("pointerdown", e => {
-    startX = e.clientX;
-    card.setPointerCapture(e.pointerId);
-    card.addEventListener("pointermove", swipeCard);
-    card.addEventListener("pointerup", endSwipe);
-  });
+  window.submitSignup = function () {
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const role = document.querySelector("input[name='role']:checked").value;
+    if (!name || !email) return alert("Please fill out all fields.");
+    const user = { name, email, role };
+    localStorage.setItem("jobbarUser", JSON.stringify(user));
+    localStorage.setItem("jobbarMatches", JSON.stringify([]));
+    loadUser();
+  };
 
-  function renderJob() {
-    const job = jobs[currentJob];
-    document.getElementById("jobTitle").textContent = job.title;
-    document.getElementById("jobCompany").textContent = job.company;
-    document.getElementById("jobDesc").textContent = job.desc;
-    card.style.transform = "none";
-    card.style.transition = "none";
-    card.style.left = "0";
-  }
-
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-  }
-
-  function saveProfile() {
-    const name = document.getElementById("profileName").value;
-    const interests = Array.from(document.querySelectorAll('#profile input[type=checkbox]:checked'))
-      .map(cb => cb.value);
-    localStorage.setItem("jobbarProfile", JSON.stringify({ name, interests }));
-    document.getElementById("saveMsg").textContent = "Profile saved!";
-  }
-
-  window.switchTab = switchTab;
-  window.saveProfile = saveProfile;
-
-  renderJob();
-};
- - startX;
-
-    if (Math.abs(deltaX) > 100) {
-      card.style.transition = "transform 0.3s ease";
-      card.style.transform = `translateX(${deltaX > 0 ? 1000 : -1000}px) rotate(${deltaX / 10}deg)`;
-      setTimeout(() => {
-        card.style.transition = "none";
-        card.style.transform = "translateX(0)";
-        currentJob = (currentJob + 1) % jobs.length;
-        renderJob();
-      }, 300);
+  function renderDashboard(user) {
+    jobsContent.innerHTML = "";
+    matchList.innerHTML = "";
+    if (user.role === "seeker") {
+      dummyJobs.forEach((job, i) => {
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `<h3>${job.title}</h3><p>${job.company}</p><p>${job.desc}</p>
+                         <button onclick="matchJob(${i})">Swipe Right</button>`;
+        jobsContent.appendChild(div);
+      });
     } else {
-      card.style.transition = "transform 0.3s ease";
-      card.style.transform = "translateX(0)";
+      jobsContent.innerHTML = "<p>You have 3 applicants interested in your job post.</p>";
+      const fakeMatches = ["Alice Johnson", "Bob Smith", "Casey Lee"];
+      fakeMatches.forEach(name => {
+        const li = document.createElement("li");
+        li.textContent = `${name} liked your job!`;
+        matchList.appendChild(li);
+      });
     }
-
-    startX = null;
   }
 
-  function renderJob() {
-    const job = jobs[currentJob];
-    document.getElementById("jobTitle").textContent = job.title;
-    document.getElementById("jobCompany").textContent = job.company;
-    document.getElementById("jobDesc").textContent = job.desc;
-    card.style.transform = "none";
-    card.style.transition = "none";
-    card.style.left = "0";
-  }
+  window.matchJob = function (index) {
+    const matches = JSON.parse(localStorage.getItem("jobbarMatches")) || [];
+    matches.push(dummyJobs[index]);
+    localStorage.setItem("jobbarMatches", JSON.stringify(matches));
+    alert("Matched! Check your Matches tab.");
+  };
 
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-  }
+  window.switchTab = function (tabId) {
+    document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
+    document.getElementById(tabId).classList.remove("hidden");
+    if (tabId === "matchesTab") {
+      const matches = JSON.parse(localStorage.getItem("jobbarMatches")) || [];
+      matchList.innerHTML = "";
+      matches.forEach(m => {
+        const li = document.createElement("li");
+        li.textContent = `${m.title} at ${m.company}`;
+        matchList.appendChild(li);
+      });
+    }
+  };
 
-  function saveProfile() {
-    const name = document.getElementById("profileName").value;
-    const interests = Array.from(document.querySelectorAll('#profile input[type=checkbox]:checked'))
-      .map(cb => cb.value);
-    localStorage.setItem("jobbarProfile", JSON.stringify({ name, interests }));
-    document.getElementById("saveMsg").textContent = "Profile saved!";
-  }
+  window.logout = function () {
+    localStorage.clear();
+    location.reload();
+  };
 
-  card.addEventListener("touchstart", startSwipe);
-  card.addEventListener("touchmove", moveSwipe);
-  card.addEventListener("touchend", endSwipe);
-  card.addEventListener("mousedown", startSwipe);
-  card.addEventListener("mousemove", moveSwipe);
-  card.addEventListener("mouseup", endSwipe);
-
-  window.switchTab = switchTab;
-  window.saveProfile = saveProfile;
-
-  renderJob();
+  loadUser();
 };
