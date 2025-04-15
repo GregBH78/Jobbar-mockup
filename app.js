@@ -19,11 +19,14 @@ const jobs = [
 let currentJob = 0;
 
 function swipe(direction) {
-  if (direction === 'yes') {
-    alert("Matched! The employer can now message you.");
-  }
-  currentJob = (currentJob + 1) % jobs.length;
-  renderJob();
+  const card = document.getElementById("jobCard");
+  card.classList.add(direction === 'yes' ? 'swipe-right' : 'swipe-left');
+
+  setTimeout(() => {
+    card.classList.remove('swipe-left', 'swipe-right');
+    currentJob = (currentJob + 1) % jobs.length;
+    renderJob();
+  }, 600);
 }
 
 function renderJob() {
@@ -34,10 +37,16 @@ function renderJob() {
 }
 
 function switchTab(tabId) {
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.classList.remove('active');
-  });
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
+}
+
+function saveProfile() {
+  const name = document.getElementById("profileName").value;
+  const interests = Array.from(document.querySelectorAll('#profile input[type=checkbox]:checked'))
+    .map(cb => cb.value);
+  localStorage.setItem("jobbarProfile", JSON.stringify({ name, interests }));
+  document.getElementById("saveMsg").textContent = "Profile saved!";
 }
 
 renderJob();
