@@ -4,11 +4,10 @@ window.onload = function () {
     { title: "UX Designer", company: "@DesignCore", desc: "Craft intuitive UI/UX." },
     { title: "Marketing Lead", company: "@ZoomBoom", desc: "Growth and campaigns." }
   ];
-
   let currentJob = 0;
   const card = document.getElementById("jobCard");
-  const matchList = document.getElementById("matchList");
   const badge = document.getElementById("userBadge");
+  let startX = null;
 
   function renderJob() {
     const job = jobs[currentJob];
@@ -18,13 +17,14 @@ window.onload = function () {
   }
 
   function saveMatch(job) {
-    const matches = JSON.parse(localStorage.getItem("jobbarMatches")) || [];
+    const matches = JSON.parse(localStorage.getItem("jobbarMatches") || "[]");
     matches.push(job);
     localStorage.setItem("jobbarMatches", JSON.stringify(matches));
   }
 
   function updateMatches() {
-    const matches = JSON.parse(localStorage.getItem("jobbarMatches")) || [];
+    const matchList = document.getElementById("matchList");
+    const matches = JSON.parse(localStorage.getItem("jobbarMatches") || "[]");
     matchList.innerHTML = "";
     matches.forEach(m => {
       const li = document.createElement("li");
@@ -33,17 +33,14 @@ window.onload = function () {
     });
   }
 
-  function showSection(sectionId) {
+  function showSection(id) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-    document.getElementById(sectionId).classList.add("active");
-    if (sectionId === "matches") updateMatches();
-    if (sectionId === "profile") loadProfile();
+    document.getElementById(id).classList.add("active");
+    if (id === "matches") updateMatches();
+    if (id === "profile") loadProfile();
   }
-
   window.showSection = showSection;
   window.openProfile = () => showSection("profile");
-
-  let startX = null;
 
   function startSwipe(e) {
     startX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -51,8 +48,8 @@ window.onload = function () {
 
   function moveSwipe(e) {
     if (startX === null) return;
-    const currentX = e.touches ? e.touches[0].clientX : e.clientX;
-    const deltaX = currentX - startX;
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const deltaX = x - startX;
     card.style.transform = `translateX(${deltaX}px) rotate(${deltaX / 20}deg)`;
   }
 
@@ -71,7 +68,6 @@ window.onload = function () {
         card.style.transform = "translateX(0)";
       }, 300);
     } else {
-      card.style.transition = "transform 0.3s ease";
       card.style.transform = "translateX(0)";
     }
     startX = null;
@@ -88,7 +84,8 @@ window.onload = function () {
     const name = document.getElementById("profileName").value;
     const email = document.getElementById("profileEmail").value;
     const interests = Array.from(document.querySelectorAll('#profile input[type=checkbox]:checked')).map(cb => cb.value);
-    const profile = { name, email, interests, photo: localStorage.getItem("jobbarPhoto") || "" };
+    const photo = localStorage.getItem("jobbarPhoto") || "";
+    const profile = { name, email, interests, photo };
     localStorage.setItem("jobbarProfile", JSON.stringify(profile));
     updateBadge(profile);
     alert("Profile saved!");
@@ -96,6 +93,7 @@ window.onload = function () {
 
   window.handlePhotoUpload = function () {
     const file = document.getElementById("profilePic").files[0];
+    if (!file) return;
     const reader = new FileReader();
     reader.onload = function (e) {
       localStorage.setItem("jobbarPhoto", e.target.result);
@@ -103,7 +101,7 @@ window.onload = function () {
       document.getElementById("profilePreview").classList.remove("hidden");
       updateBadge(JSON.parse(localStorage.getItem("jobbarProfile") || "{}"));
     };
-    if (file) reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
   };
 
   function loadProfile() {
@@ -119,7 +117,7 @@ window.onload = function () {
 
   function updateBadge(profile) {
     if (profile.photo) {
-      badge.innerHTML = `<img src="${profile.photo}" style="width:100%; height:100%; object-fit:cover;" />`;
+      badge.innerHTML = `<img src="${profile.photo}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />`;
     } else if (profile.name) {
       badge.textContent = profile.name[0].toUpperCase();
     } else {

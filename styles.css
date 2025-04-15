@@ -1,80 +1,79 @@
+* {
+  box-sizing: border-box;
+}
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f5f7fa;
+  font-family: 'Arial', sans-serif;
+  background: #f7f9fc;
   color: #333;
 }
-
 header {
+  background: #6c5ce7;
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #6c5ce7;
-  color: white;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
 }
-
-.logo-title {
+.header-left {
   display: flex;
   align-items: center;
 }
-
 .logo-small {
-  height: 40px;
-  margin-right: 1rem;
-  border-radius: 8px;
+  height: 36px;
+  border-radius: 6px;
 }
-
-#userBadge {
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+.user-badge {
   background: white;
   color: #6c5ce7;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-nav {
+  font-size: 1rem;
   text-align: center;
-  margin: 1rem 0;
+  line-height: 36px;
+  cursor: pointer;
+  overflow: hidden;
 }
-
+nav {
+  background: #eee;
+  text-align: center;
+  padding: 0.5rem;
+}
 nav button {
-  margin: 0 0.5rem;
-  padding: 0.5rem 1rem;
   background: #dfe6e9;
   border: none;
-  border-radius: 5px;
+  margin: 0 0.3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: bold;
 }
-
-main.section {
+.section {
   display: none;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
 }
-
-main.section.active {
+.section.active {
   display: block;
 }
-
 .card-container {
   max-width: 400px;
-  margin: 2rem auto;
+  margin: 1rem auto;
   height: 300px;
   position: relative;
 }
-
 .card {
   background: white;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: center;
   position: absolute;
   width: 100%;
@@ -83,10 +82,9 @@ main.section.active {
   user-select: none;
   cursor: grab;
 }
-
 .profile-preview {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   object-fit: cover;
   border-radius: 50%;
   margin: 1rem auto;
@@ -94,4 +92,13 @@ main.section.active {
 }
 .hidden {
   display: none;
+}
+input[type="text"], input[type="email"] {
+  display: block;
+  width: 90%;
+  max-width: 300px;
+  margin: 0.5rem auto;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }

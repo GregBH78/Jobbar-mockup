@@ -8,11 +8,11 @@
 </head>
 <body>
   <header>
-    <div class="logo-title">
+    <div class="header-left">
       <img src="IMG_0043.jpeg" alt="Jobbar logo" class="logo-small" />
-      <h1>Jobbar</h1>
+      <span class="logo-text">Jobbar</span>
     </div>
-    <div id="userBadge" onclick="openProfile()"></div>
+    <div id="userBadge" class="user-badge" onclick="openProfile()">?</div>
   </header>
 
   <nav>
@@ -21,22 +21,22 @@
     <button onclick="showSection('profile')">Profile</button>
   </nav>
 
-  <main id="jobs" class="section">
+  <main id="jobs" class="section active">
     <div class="card-container">
       <div class="card" id="jobCard">
-        <h2 id="jobTitle">Frontend Developer</h2>
-        <p id="jobCompany">@SwiftTech</p>
-        <p id="jobDesc">Looking for a React dev who loves building sleek interfaces and fast prototypes.</p>
+        <h2 id="jobTitle"></h2>
+        <p id="jobCompany"></p>
+        <p id="jobDesc"></p>
       </div>
     </div>
   </main>
 
-  <main id="matches" class="section hidden">
+  <main id="matches" class="section">
     <h2>Your Matches</h2>
     <ul id="matchList"></ul>
   </main>
 
-  <main id="profile" class="section hidden">
+  <main id="profile" class="section">
     <h2>My Profile</h2>
     <input type="text" id="profileName" placeholder="Name" />
     <input type="email" id="profileEmail" placeholder="Email" />
