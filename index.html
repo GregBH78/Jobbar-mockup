@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jobbar - Swipe Your Career</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Jobbar</h1>
+    <nav>
+      <button onclick="switchTab('jobs')">Jobs</button>
+      <button onclick="switchTab('chat')">Chat</button>
+      <button onclick="switchTab('news')">News</button>
+    </nav>
+  </header>
+
+  <main id="jobs" class="tab active">
+    <div class="card" id="jobCard">
+      <h2 id="jobTitle">Frontend Developer</h2>
+      <p id="jobCompany">@SwiftTech</p>
+      <p id="jobDesc">Looking for a React dev who loves building sleek interfaces and fast prototypes.</p>
+      <button onclick="swipe('no')">Swipe Left</button>
+      <button onclick="swipe('yes')">Swipe Right</button>
+    </div>
+  </main>
+
+  <main id="chat" class="tab">
+    <div class="chat-window">
+      <p><strong>SwiftTech HR:</strong> Hey! Loved your profile. Can we schedule a chat?</p>
+      <input type="text" placeholder="Type a message..." />
+    </div>
+  </main>
+
+  <main id="news" class="tab">
+    <h2>Industry Buzz</h2>
+    <ul>
+      <li>How Gen Z is reshaping the job market</li>
+      <li>Top 5 ways to ditch your CV and get noticed</li>
+      <li>Startup culture vs. Corporate life: What suits you?</li>
+    </ul>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
