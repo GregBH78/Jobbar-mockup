@@ -7,12 +7,21 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="splash">
-    <img src="IMG_0043.jpeg" alt="Jobbar logo" class="logo" />
-    <h2>Swipe right on your next career move.</h2>
-  </div>
+  <header>
+    <div class="logo-title">
+      <img src="IMG_0043.jpeg" alt="Jobbar logo" class="logo-small" />
+      <h1>Jobbar</h1>
+    </div>
+    <div id="userBadge" onclick="openProfile()"></div>
+  </header>
 
-  <main id="app">
+  <nav>
+    <button onclick="showSection('jobs')">Jobs</button>
+    <button onclick="showSection('matches')">Matches</button>
+    <button onclick="showSection('profile')">Profile</button>
+  </nav>
+
+  <main id="jobs" class="section">
     <div class="card-container">
       <div class="card" id="jobCard">
         <h2 id="jobTitle">Frontend Developer</h2>
@@ -22,18 +31,25 @@
     </div>
   </main>
 
-  <div id="signupModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Join Jobbar</h2>
-      <input type="text" id="name" placeholder="Your Name" />
-      <input type="email" id="email" placeholder="Your Email" />
-      <div class="role-select">
-        <label><input type="radio" name="role" value="seeker" checked /> Job Seeker</label>
-        <label><input type="radio" name="role" value="poster" /> Job Poster</label>
-      </div>
-      <button onclick="submitSignup()">Sign Up</button>
-    </div>
-  </div>
+  <main id="matches" class="section hidden">
+    <h2>Your Matches</h2>
+    <ul id="matchList"></ul>
+  </main>
+
+  <main id="profile" class="section hidden">
+    <h2>My Profile</h2>
+    <input type="text" id="profileName" placeholder="Name" />
+    <input type="email" id="profileEmail" placeholder="Email" />
+    <label>Upload Photo:</label>
+    <input type="file" id="profilePic" accept="image/*" onchange="handlePhotoUpload()" />
+    <img id="profilePreview" class="profile-preview hidden" />
+    <h3>Job Interests:</h3>
+    <label><input type="checkbox" value="Design" /> Design</label>
+    <label><input type="checkbox" value="Engineering" /> Engineering</label>
+    <label><input type="checkbox" value="Remote" /> Remote</label>
+    <br/>
+    <button onclick="saveProfile()">Save Profile</button>
+  </main>
 
   <script src="app.js"></script>
 </body>

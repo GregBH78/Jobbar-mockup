@@ -3,22 +3,64 @@ body {
   margin: 0;
   background: #f5f7fa;
   color: #333;
-  overflow-x: hidden;
 }
 
-.splash {
-  text-align: center;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: #6c5ce7;
   color: white;
-  padding: 2rem 1rem;
+  padding: 1rem;
 }
 
-.logo {
-  max-width: 90%;
-  height: auto;
+.logo-title {
+  display: flex;
+  align-items: center;
+}
+
+.logo-small {
+  height: 40px;
+  margin-right: 1rem;
+  border-radius: 8px;
+}
+
+#userBadge {
+  background: white;
+  color: #6c5ce7;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+nav {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+nav button {
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #dfe6e9;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+main.section {
+  display: none;
+  padding: 2rem;
+  text-align: center;
+}
+
+main.section.active {
   display: block;
-  margin: 0 auto 1rem auto;
-  border-radius: 10px;
 }
 
 .card-container {
@@ -42,42 +84,14 @@ body {
   cursor: grab;
 }
 
-.modal {
-  position: fixed;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+.profile-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 1rem auto;
+  display: block;
 }
-
-.modal-content {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  max-width: 400px;
-  width: 90%;
-  text-align: center;
-}
-
-.modal-content input {
-  width: 90%;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-}
-
-button {
-  background: #6c5ce7;
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  margin-top: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .hidden {
   display: none;
 }
