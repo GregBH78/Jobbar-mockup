@@ -17,7 +17,8 @@ header {
 }
 .logo-banner {
   height: 40px;
-  border-radius: 6px;
+  max-width: 150px;
+  object-fit: contain;
 }
 .user-badge {
   background: white;
@@ -80,6 +81,12 @@ nav button {
   border-radius: 50%;
   margin: 1rem auto;
   display: block;
+}
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: #999;
 }
 .hidden {
   display: none;
