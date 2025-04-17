@@ -1,63 +1,73 @@
 
-function showSection(sectionId) {
+function showSection(id) {
   document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-  document.getElementById(sectionId).classList.add('active');
+  document.getElementById(id).classList.add('active');
 }
-function toggleProfileMenu() {
-  showSection('profile');
+function toggleAuthPopup() {
+  document.getElementById('authPopup').classList.toggle('hidden');
+}
+function closeAuthPopup() {
+  document.getElementById('authPopup').classList.add('hidden');
 }
 function signUp() {
   const username = document.getElementById('authUsername').value;
   const password = document.getElementById('authPassword').value;
-  const profilePic = document.getElementById('authProfilePic').files[0];
+  const file = document.getElementById('authProfilePic').files[0];
 
   if (!username || !password) {
-    alert('Please enter a username and password');
+    alert("Please enter username and password");
     return;
   }
 
   const reader = new FileReader();
-  reader.onload = function (e) {
-    const imageData = e.target.result;
-    localStorage.setItem('jobbar_user', JSON.stringify({
+  reader.onload = function(e) {
+    const userData = {
       username,
       password,
-      profileImage: imageData
-    }));
+      profileImage: e.target.result || null
+    };
+    localStorage.setItem('jobbar_user', JSON.stringify(userData));
     logIn();
   };
-  if (profilePic) {
-    reader.readAsDataURL(profilePic);
+
+  if (file) {
+    reader.readAsDataURL(file);
   } else {
     localStorage.setItem('jobbar_user', JSON.stringify({ username, password, profileImage: null }));
     logIn();
   }
 }
 function logIn() {
-  const savedUser = JSON.parse(localStorage.getItem('jobbar_user'));
+  const stored = JSON.parse(localStorage.getItem('jobbar_user'));
   const username = document.getElementById('authUsername').value;
   const password = document.getElementById('authPassword').value;
 
-  if (!savedUser || savedUser.username !== username || savedUser.password !== password) {
-    alert('Invalid credentials');
+  if (!stored || stored.username !== username || stored.password !== password) {
+    alert("Invalid credentials");
     return;
   }
 
-  document.getElementById('authSection').classList.add('hidden');
-  document.getElementById('appMain').classList.remove('hidden');
-  document.getElementById('profileNameDisplay').textContent = savedUser.username;
-
+  document.getElementById('profileName').textContent = `Welcome, ${stored.username}`;
   const avatar = document.getElementById('userAvatar');
   const initial = document.getElementById('userInitial');
-  const preview = document.getElementById('profilePreview');
+  const pic = document.getElementById('profilePic');
 
-  if (savedUser.profileImage) {
-    avatar.src = savedUser.profileImage;
+  if (stored.profileImage) {
+    avatar.src = stored.profileImage;
     avatar.classList.remove('hidden');
     initial.classList.add('hidden');
-    preview.src = savedUser.profileImage;
-    preview.classList.remove('hidden');
+    pic.src = stored.profileImage;
+    pic.classList.remove('hidden');
   } else {
-    initial.textContent = savedUser.username.charAt(0).toUpperCase();
+    initial.textContent = stored.username[0].toUpperCase();
+  }
+
+  closeAuthPopup();
+}
+function handleGuestAction() {
+  const user = localStorage.getItem('jobbar_user');
+  if (!user) {
+    alert("Please sign in to swipe or match");
+    toggleAuthPopup();
   }
 }
