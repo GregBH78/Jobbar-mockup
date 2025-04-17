@@ -8,29 +8,20 @@ body {
   color: #333;
 }
 header {
-  background: #6c5ce7;
+  background: #7462f4;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
 }
-.header-left {
-  display: flex;
-  align-items: center;
-}
-.logo-small {
-  height: 36px;
+.logo-banner {
+  height: 40px;
   border-radius: 6px;
-}
-.logo-text {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-left: 0.5rem;
 }
 .user-badge {
   background: white;
-  color: #6c5ce7;
+  color: #7462f4;
   border-radius: 50%;
   width: 36px;
   height: 36px;
