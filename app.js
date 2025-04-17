@@ -1,131 +1,63 @@
 
-window.onload = function () {
-  const jobs = [
-    { title: "Frontend Developer", company: "@SwiftTech", desc: "React dev needed." },
-    { title: "UX Designer", company: "@DesignCore", desc: "Craft intuitive UI/UX." },
-    { title: "Marketing Lead", company: "@ZoomBoom", desc: "Growth and campaigns." }
-  ];
-  let currentJob = 0;
-  const card = document.getElementById("jobCard");
-  const badge = document.getElementById("userBadge");
-  let startX = null;
+function showSection(sectionId) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+}
+function toggleProfileMenu() {
+  showSection('profile');
+}
+function signUp() {
+  const username = document.getElementById('authUsername').value;
+  const password = document.getElementById('authPassword').value;
+  const profilePic = document.getElementById('authProfilePic').files[0];
 
-  function renderJob() {
-    const job = jobs[currentJob];
-    document.getElementById("jobTitle").textContent = job.title;
-    document.getElementById("jobCompany").textContent = job.company;
-    document.getElementById("jobDesc").textContent = job.desc;
+  if (!username || !password) {
+    alert('Please enter a username and password');
+    return;
   }
 
-  function saveMatch(job) {
-    const matches = JSON.parse(localStorage.getItem("jobbarMatches") || "[]");
-    matches.push(job);
-    localStorage.setItem("jobbarMatches", JSON.stringify(matches));
-  }
-
-  function updateMatches() {
-    const matchList = document.getElementById("matchList");
-    const matches = JSON.parse(localStorage.getItem("jobbarMatches") || "[]");
-    matchList.innerHTML = "";
-    matches.forEach(m => {
-      const li = document.createElement("li");
-      li.textContent = `${m.title} at ${m.company}`;
-      matchList.appendChild(li);
-    });
-  }
-
-  function showSection(id) {
-    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    if (id === "matches") updateMatches();
-    if (id === "profile") loadProfile();
-  }
-  window.showSection = showSection;
-  window.openProfile = () => showSection("profile");
-
-  function startSwipe(e) {
-    startX = e.touches ? e.touches[0].clientX : e.clientX;
-  }
-
-  function moveSwipe(e) {
-    if (startX === null) return;
-    const x = e.touches ? e.touches[0].clientX : e.clientX;
-    const deltaX = x - startX;
-    card.style.transform = `translateX(${deltaX}px) rotate(${deltaX / 20}deg)`;
-  }
-
-  function endSwipe(e) {
-    if (startX === null) return;
-    const endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-    const deltaX = endX - startX;
-    if (Math.abs(deltaX) > 100) {
-      saveMatch(jobs[currentJob]);
-      card.style.transition = "transform 0.3s ease";
-      card.style.transform = `translateX(${deltaX > 0 ? 1000 : -1000}px) rotate(${deltaX / 10}deg)`;
-      setTimeout(() => {
-        currentJob = (currentJob + 1) % jobs.length;
-        renderJob();
-        card.style.transition = "none";
-        card.style.transform = "translateX(0)";
-      }, 300);
-    } else {
-      card.style.transform = "translateX(0)";
-    }
-    startX = null;
-  }
-
-  card.addEventListener("touchstart", startSwipe);
-  card.addEventListener("touchmove", moveSwipe);
-  card.addEventListener("touchend", endSwipe);
-  card.addEventListener("mousedown", startSwipe);
-  card.addEventListener("mousemove", moveSwipe);
-  card.addEventListener("mouseup", endSwipe);
-
-  window.saveProfile = function () {
-    const name = document.getElementById("profileName").value;
-    const email = document.getElementById("profileEmail").value;
-    const interests = Array.from(document.querySelectorAll('#profile input[type=checkbox]:checked')).map(cb => cb.value);
-    const photo = localStorage.getItem("jobbarPhoto") || "";
-    const profile = { name, email, interests, photo };
-    localStorage.setItem("jobbarProfile", JSON.stringify(profile));
-    updateBadge(profile);
-    alert("Profile saved!");
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const imageData = e.target.result;
+    localStorage.setItem('jobbar_user', JSON.stringify({
+      username,
+      password,
+      profileImage: imageData
+    }));
+    logIn();
   };
+  if (profilePic) {
+    reader.readAsDataURL(profilePic);
+  } else {
+    localStorage.setItem('jobbar_user', JSON.stringify({ username, password, profileImage: null }));
+    logIn();
+  }
+}
+function logIn() {
+  const savedUser = JSON.parse(localStorage.getItem('jobbar_user'));
+  const username = document.getElementById('authUsername').value;
+  const password = document.getElementById('authPassword').value;
 
-  window.handlePhotoUpload = function () {
-    const file = document.getElementById("profilePic").files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      localStorage.setItem("jobbarPhoto", e.target.result);
-      document.getElementById("profilePreview").src = e.target.result;
-      document.getElementById("profilePreview").classList.remove("hidden");
-      updateBadge(JSON.parse(localStorage.getItem("jobbarProfile") || "{}"));
-    };
-    reader.readAsDataURL(file);
-  };
-
-  function loadProfile() {
-    const profile = JSON.parse(localStorage.getItem("jobbarProfile") || "{}");
-    document.getElementById("profileName").value = profile.name || "";
-    document.getElementById("profileEmail").value = profile.email || "";
-    if (profile.photo) {
-      const img = document.getElementById("profilePreview");
-      img.src = profile.photo;
-      img.classList.remove("hidden");
-    }
+  if (!savedUser || savedUser.username !== username || savedUser.password !== password) {
+    alert('Invalid credentials');
+    return;
   }
 
-  function updateBadge(profile) {
-    if (profile.photo) {
-      badge.innerHTML = `<img src="${profile.photo}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />`;
-    } else if (profile.name) {
-      badge.textContent = profile.name[0].toUpperCase();
-    } else {
-      badge.textContent = "?";
-    }
-  }
+  document.getElementById('authSection').classList.add('hidden');
+  document.getElementById('appMain').classList.remove('hidden');
+  document.getElementById('profileNameDisplay').textContent = savedUser.username;
 
-  renderJob();
-  updateBadge(JSON.parse(localStorage.getItem("jobbarProfile") || "{}"));
-};
+  const avatar = document.getElementById('userAvatar');
+  const initial = document.getElementById('userInitial');
+  const preview = document.getElementById('profilePreview');
+
+  if (savedUser.profileImage) {
+    avatar.src = savedUser.profileImage;
+    avatar.classList.remove('hidden');
+    initial.classList.add('hidden');
+    preview.src = savedUser.profileImage;
+    preview.classList.remove('hidden');
+  } else {
+    initial.textContent = savedUser.username.charAt(0).toUpperCase();
+  }
+}
