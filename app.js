@@ -1,3 +1,4 @@
+
 window.onload = function () {
   const jobs = [
     { title: "Frontend Developer", company: "@SwiftTech", desc: "React dev needed." },
